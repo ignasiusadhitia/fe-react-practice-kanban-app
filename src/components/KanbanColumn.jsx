@@ -1,14 +1,56 @@
-import React from "react";
-import TaskCard from "./TaskCard";
+import React from 'react';
 
-const KanbanColumn = ({ title }) => (
+import PropTypes from 'prop-types';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
+
+import TaskCard from './TaskCard';
+
+const KanbanColumn = ({ title = 'Untitled', tasks = [], droppableId }) => (
   <div className="flex-1">
     <h3 className="text-lg font-bold mb-4">{title}</h3>
-    <div className="space-y-4">
-      <TaskCard />
-      <TaskCard />
-    </div>
+    <Droppable droppableId={droppableId}>
+      {(provided) => (
+        <div
+          {...provided.droppableProps}
+          ref={provided.innerRef}
+          className="space-y-4 min-h-[50px]" // Tambahkan tinggi minimum
+        >
+          {tasks?.length > 0 ? (
+            tasks.map((task, index) => (
+              <Draggable key={task.id} draggableId={task.id} index={index}>
+                {(provided) => (
+                  <TaskCard
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    task={task}
+                  />
+                )}
+              </Draggable>
+            ))
+          ) : (
+            <div className="text-gray-500">No tasks</div>
+          )}
+          {provided.placeholder}
+        </div>
+      )}
+    </Droppable>
   </div>
 );
+
+KanbanColumn.propTypes = {
+  title: PropTypes.string.isRequired,
+  tasks: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      startAt: PropTypes.string.isRequired,
+      endAt: PropTypes.string.isRequired,
+      status: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  droppableId: PropTypes.string.isRequired,
+};
 
 export default KanbanColumn;

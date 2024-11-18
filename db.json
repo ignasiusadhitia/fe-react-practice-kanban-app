@@ -1,0 +1,40 @@
+{
+  "tasks": [
+    {
+      "id": "1",
+      "title": "Task 1",
+      "description": "This is task 1",
+      "startAt": "2024-11-18",
+      "endAt": "2024-11-19",
+      "tag": "development",
+      "status": "backlog"
+    },
+    {
+      "id": "2",
+      "title": "Task 2",
+      "description": "This is task 2",
+      "startAt": "2024-11-17",
+      "endAt": "2024-11-20",
+      "tag": "development",
+      "status": "onProgress"
+    },
+    {
+      "id": "1731914304384",
+      "title": "title",
+      "description": "description",
+      "startAt": "2024-11-18",
+      "tag": "design",
+      "endAt": "2024-11-30",
+      "status": "backlog"
+    },
+    {
+      "id": "1731915150306",
+      "title": "Task 4",
+      "description": "deskripsi task 4",
+      "startAt": "2024-11-18",
+      "endAt": "2024-11-30",
+      "tag": "development",
+      "status": "backlog"
+    }
+  ]
+}
