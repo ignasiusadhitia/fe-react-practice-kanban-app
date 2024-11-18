@@ -6,12 +6,7 @@ import AddTaskModal from 'components/AddTaskModal';
 import KanbanColumn from 'components/KanbanColumn';
 import Navbar from 'components/Navbar';
 
-import {
-  addTask,
-  deleteTask,
-  getTasks,
-  updateTask,
-} from './services/taskService';
+import { addTask, getTasks, updateTask } from './services/taskService';
 
 const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,9 +31,10 @@ const App = () => {
   });
 
   // Handler untuk drag-and-drop
-  const onDragEnd = (result) => {
+  const onDragEnd = async (result) => {
     const { source, destination } = result;
 
+    // Jika tidak ada destinasi, batalkan operasi
     if (!destination) return;
 
     const sourceColumn = columns[source.droppableId];
@@ -46,19 +42,31 @@ const App = () => {
     const sourceItems = [...sourceColumn.items];
     const destItems = [...destColumn.items];
 
+    // Ambil task yang dipindahkan
     const [movedTask] = sourceItems.splice(source.index, 1);
 
+    console.log('Moved Task:', movedTask);
+
     if (source.droppableId === destination.droppableId) {
+      // Jika task dipindahkan dalam kolom yang sama
       sourceItems.splice(destination.index, 0, movedTask);
-      setColumns((prev) => ({
-        ...prev,
-        [source.droppableId]: {
-          ...sourceColumn,
-          items: sourceItems,
-        },
-      }));
     } else {
+      // Jika task dipindahkan ke kolom yang berbeda
       destItems.splice(destination.index, 0, movedTask);
+      // Update status tugas
+      const updatedTask = { ...movedTask, status: destination.droppableId };
+
+      try {
+        await updateTask(updatedTask);
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === updatedTask.id ? updatedTask : task
+          )
+        );
+      } catch (error) {
+        console.error('Failed to update task status:', error);
+      }
+
       setColumns((prev) => ({
         ...prev,
         [source.droppableId]: {
@@ -70,14 +78,6 @@ const App = () => {
           items: destItems,
         },
       }));
-      // Update status tugas
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === movedTask.id
-            ? { ...task, status: destination.droppableId }
-            : task
-        )
-      );
     }
   };
 

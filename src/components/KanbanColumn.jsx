@@ -13,7 +13,7 @@ const KanbanColumn = ({ title = 'Untitled', tasks = [], droppableId }) => (
         <div
           {...provided.droppableProps}
           ref={provided.innerRef}
-          className="space-y-4 min-h-[50px]" // Tambahkan tinggi minimum
+          className="space-y-4 min-h-[50px]"
         >
           {tasks?.length > 0 ? (
             tasks.map((task, index) => (
