@@ -13,8 +13,6 @@ The Kanban Board is a web-based task management application built using **React*
 1. **Drag-and-Drop**: Move tasks between columns easily using React Beautiful DnD.
 2. **Task Management**:
    - Add new tasks via a modal form.
-   - Edit tasks by updating their status using drag-and-drop.
-   - Delete tasks when no longer needed.
 3. **Task Grouping by Status**:
    - _Backlog_
    - _On Progress_
@@ -127,10 +125,6 @@ The application will be accessible at `http://localhost:3000`, and the API serve
 1. Click and hold on a task in any column.
 2. Drag the task to the desired column.
 3. Release the task to save the changes.
-
-### **Deleting Tasks**
-
-- You can delete tasks by clicking the delete button (if implemented in the modal or task row).
 
 ---
 
