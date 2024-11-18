@@ -1,18 +1,32 @@
 import React, { useEffect, useState } from 'react';
 
 import { DragDropContext } from 'react-beautiful-dnd';
+import { useDispatch, useSelector } from 'react-redux';
 
 import AddTaskModal from 'components/AddTaskModal';
 import KanbanColumn from 'components/KanbanColumn';
 import Navbar from 'components/Navbar';
 
-import { addTask, getTasks, updateTask } from './services/taskService';
+import {
+  addTask,
+  deleteTask,
+  getTasks,
+  updateTask,
+} from './services/taskService';
+import {
+  addTaskAction,
+  setTasksAction,
+  updateTaskAction,
+} from './store/actions/taskAction';
 
 const App = () => {
+  const dispatch = useDispatch();
+  const tasks = useSelector((state) => state.tasks.tasks);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [task, setTask] = useState({});
-  const [tasks, setTasks] = useState([]);
   const [columns, setColumns] = useState({});
+  const [isEditingTask, setIsEditingTask] = useState(false);
 
   // Fungsi untuk membangun struktur kolom berdasarkan status tugas
   const getColumnsFromTasks = () => ({
@@ -45,8 +59,6 @@ const App = () => {
     // Ambil task yang dipindahkan
     const [movedTask] = sourceItems.splice(source.index, 1);
 
-    console.log('Moved Task:', movedTask);
-
     if (source.droppableId === destination.droppableId) {
       // Jika task dipindahkan dalam kolom yang sama
       sourceItems.splice(destination.index, 0, movedTask);
@@ -58,11 +70,7 @@ const App = () => {
 
       try {
         await updateTask(updatedTask);
-        setTasks((prevTasks) =>
-          prevTasks.map((task) =>
-            task.id === updatedTask.id ? updatedTask : task
-          )
-        );
+        dispatch(updateTaskAction(updatedTask));
       } catch (error) {
         console.error('Failed to update task status:', error);
       }
@@ -95,7 +103,7 @@ const App = () => {
         status: 'backlog',
       };
       const createdTask = await addTask(newTask);
-      setTasks((prevTasks) => [...prevTasks, createdTask]);
+      dispatch(addTaskAction(createdTask));
     } catch (error) {
       console.error('Failed to add task:', error);
     }
@@ -113,9 +121,46 @@ const App = () => {
   // Submit form tugas
   const submitTaskHandler = (event) => {
     event.preventDefault();
-    addTaskHandler(task);
-    setTask({});
+    if (isEditingTask) {
+      updateTaskHandler(task);
+    } else {
+      addTaskHandler(task);
+    }
+
     toggleModalHandler();
+  };
+
+  const editTaskHandler = (task) => {
+    setIsEditingTask(true);
+    setTask(task);
+    setIsModalOpen(true);
+  };
+
+  const updateTaskHandler = async (updatedTask) => {
+    try {
+      const response = await updateTask(updatedTask);
+
+      dispatch(updateTask(response));
+    } catch (error) {
+      console.error(
+        'Failed to update task:',
+        error.response?.data || error.message
+      );
+    } finally {
+      setIsEditingTask(false);
+    }
+  };
+
+  const deleteTaskHandler = async (taskId) => {
+    try {
+      await deleteTask(taskId);
+      dispatch(deleteTask(taskId));
+    } catch (error) {
+      console.error(
+        'Failed to delete task:',
+        error.response?.data || error.message
+      );
+    }
   };
 
   // Fetch tugas saat komponen dimuat
@@ -123,13 +168,13 @@ const App = () => {
     const fetchTasks = async () => {
       try {
         const data = await getTasks();
-        setTasks(data);
+        dispatch(setTasksAction(data));
       } catch (error) {
         console.error('Failed to fetch tasks:', error);
       }
     };
     fetchTasks();
-  }, []);
+  }, [dispatch]);
 
   // Update kolom berdasarkan perubahan tugas
   useEffect(() => {
@@ -141,6 +186,8 @@ const App = () => {
       <Navbar onToggleModal={toggleModalHandler} />
       {isModalOpen && (
         <AddTaskModal
+          isEditingTask={isEditingTask}
+          task={task}
           onHandleInputChange={inputChangeHandler}
           onHandleSubmit={submitTaskHandler}
           onToggleModal={toggleModalHandler}
@@ -155,6 +202,8 @@ const App = () => {
                 droppableId={status}
                 tasks={column.items}
                 title={column.name}
+                onHandleDelete={deleteTaskHandler}
+                onHandleEdit={editTaskHandler}
               />
             ))}
           </div>

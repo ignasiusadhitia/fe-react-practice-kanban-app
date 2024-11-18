@@ -6,10 +6,14 @@ const AddTaskModal = ({
   onToggleModal,
   onHandleInputChange,
   onHandleSubmit,
+  task,
+  isEditingTask,
 }) => (
   <div className="modal modal-open">
     <form className="modal-box" onSubmit={onHandleSubmit}>
-      <h3 className="font-bold text-lg">Add Task</h3>
+      <h3 className="font-bold text-lg">
+        {isEditingTask ? 'Edit Task' : 'Add Task'}
+      </h3>
       <div className="form-control">
         <label className="label">Title</label>
         <input
@@ -18,6 +22,7 @@ const AddTaskModal = ({
           name="title"
           placeholder="Enter task title"
           type="text"
+          value={task.title || ''}
           onChange={onHandleInputChange}
         />
       </div>
@@ -28,6 +33,7 @@ const AddTaskModal = ({
           className="textarea textarea-bordered"
           name="description"
           placeholder="Enter task description"
+          value={task.description || ''}
           onChange={onHandleInputChange}
         />
       </div>
@@ -38,6 +44,7 @@ const AddTaskModal = ({
           className="input input-bordered"
           name="startAt"
           type="date"
+          value={task.startAt || ''}
           onChange={onHandleInputChange}
         />
       </div>
@@ -46,8 +53,10 @@ const AddTaskModal = ({
         <input
           required
           className="input input-bordered"
+          min={task.startAt || ''}
           name="endAt"
           type="date"
+          value={task.endAt || ''}
           onChange={onHandleInputChange}
         />
       </div>
@@ -56,8 +65,8 @@ const AddTaskModal = ({
         <select
           required
           className="select select-bordered"
-          defaultValue=""
           name="tag"
+          value={task.tag || ''}
           onChange={onHandleInputChange}
         >
           <option disabled value="">
@@ -73,7 +82,7 @@ const AddTaskModal = ({
           Cancel
         </button>
         <button className="btn btn-primary" type="submit">
-          Save
+          {isEditingTask ? 'Save Changes' : 'Add Task'}
         </button>
       </div>
     </form>
@@ -84,6 +93,14 @@ AddTaskModal.propTypes = {
   onToggleModal: PropTypes.func.isRequired,
   onHandleInputChange: PropTypes.func,
   onHandleSubmit: PropTypes.func,
+  task: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    startAt: PropTypes.string,
+    endAt: PropTypes.string,
+    tag: PropTypes.string,
+  }),
+  isEditingTask: PropTypes.bool.isRequired,
 };
 
 export default AddTaskModal;

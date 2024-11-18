@@ -5,7 +5,13 @@ import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 import TaskCard from './TaskCard';
 
-const KanbanColumn = ({ title = 'Untitled', tasks = [], droppableId }) => (
+const KanbanColumn = ({
+  title = 'Untitled',
+  tasks = [],
+  droppableId,
+  onHandleEdit,
+  onHandleDelete,
+}) => (
   <div className="flex-1">
     <h3 className="text-lg font-bold mb-4">{title}</h3>
     <Droppable droppableId={droppableId}>
@@ -24,6 +30,8 @@ const KanbanColumn = ({ title = 'Untitled', tasks = [], droppableId }) => (
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     task={task}
+                    onHandleDelete={onHandleDelete}
+                    onHandleEdit={onHandleEdit}
                   />
                 )}
               </Draggable>
@@ -51,6 +59,8 @@ KanbanColumn.propTypes = {
     })
   ).isRequired,
   droppableId: PropTypes.string.isRequired,
+  onHandleEdit: PropTypes.func.isRequired,
+  onHandleDelete: PropTypes.func.isRequired,
 };
 
 export default KanbanColumn;

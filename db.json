@@ -1,39 +1,30 @@
 {
   "tasks": [
     {
-      "id": "1",
-      "title": "Task 1",
-      "description": "This is task 1",
+      "id": "1731945941181",
+      "title": "task 1",
+      "description": "deskripsi task 1",
       "startAt": "2024-11-18",
-      "endAt": "2024-11-19",
-      "tag": "development",
-      "status": "backlog"
-    },
-    {
-      "id": "2",
-      "title": "Task 2",
-      "description": "This is task 2",
-      "startAt": "2024-11-17",
-      "endAt": "2024-11-20",
-      "tag": "development",
+      "endAt": "2024-11-30",
+      "tag": "testing",
       "status": "onProgress"
     },
     {
-      "id": "1731914304384",
+      "id": "1731946034485",
       "title": "title",
       "description": "description",
       "startAt": "2024-11-18",
-      "tag": "design",
-      "endAt": "2024-11-30",
-      "status": "backlog"
+      "endAt": "2024-11-27",
+      "tag": "testing",
+      "status": "done"
     },
     {
-      "id": "1731915150306",
-      "title": "Task 4",
-      "description": "deskripsi task 4",
+      "id": "1731946482587",
+      "title": "task baru",
+      "description": "deskripsi task baru",
       "startAt": "2024-11-18",
       "endAt": "2024-11-30",
-      "tag": "development",
+      "tag": "testing",
       "status": "onProgress"
     }
   ]
