@@ -1,31 +1,13 @@
 {
   "tasks": [
     {
-      "id": "1731945941181",
-      "title": "task 1",
-      "description": "deskripsi task 1",
-      "startAt": "2024-11-18",
-      "endAt": "2024-11-30",
-      "tag": "testing",
-      "status": "onProgress"
-    },
-    {
       "id": "1731946034485",
-      "title": "title",
-      "description": "description",
+      "title": "title edit",
+      "description": "description edited",
       "startAt": "2024-11-18",
       "endAt": "2024-11-27",
-      "tag": "testing",
+      "tag": "development",
       "status": "done"
-    },
-    {
-      "id": "1731946482587",
-      "title": "task baru",
-      "description": "deskripsi task baru",
-      "startAt": "2024-11-18",
-      "endAt": "2024-11-30",
-      "tag": "testing",
-      "status": "onProgress"
     }
   ]
 }

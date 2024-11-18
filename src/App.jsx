@@ -15,6 +15,7 @@ import {
 } from './services/taskService';
 import {
   addTaskAction,
+  deleteTaskAction,
   setTasksAction,
   updateTaskAction,
 } from './store/actions/taskAction';
@@ -140,7 +141,7 @@ const App = () => {
     try {
       const response = await updateTask(updatedTask);
 
-      dispatch(updateTask(response));
+      dispatch(updateTaskAction(response));
     } catch (error) {
       console.error(
         'Failed to update task:',
@@ -154,7 +155,7 @@ const App = () => {
   const deleteTaskHandler = async (taskId) => {
     try {
       await deleteTask(taskId);
-      dispatch(deleteTask(taskId));
+      dispatch(deleteTaskAction(taskId));
     } catch (error) {
       console.error(
         'Failed to delete task:',
